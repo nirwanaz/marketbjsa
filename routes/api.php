@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
@@ -29,6 +29,7 @@ use App\Http\Controllers\CategoryController;
 Route::get('/catg', [CategoryController::class, 'index']);
 Route::post('/catg', [CategoryController::class, 'store']);
 Route::get('/catg/{id}', [CategoryController::class, 'getCategory']);
+Route::get('/catg/findbyptype/{id}', [CategoryController::class, 'getCategoryByPtype']);
 Route::put('/catg/{id}', [CategoryController::class, 'update']);
 Route::delete('/catg/{id}', [CategoryController::class, 'delete']);
 
@@ -43,7 +44,10 @@ use App\Http\Controllers\MerchantController;
 Route::get('/merchant', [MerchantController::class, 'index']);
 Route::post('/merchant', [MerchantController::class, 'store']);
 Route::get('/merchant/{id}', [MerchantController::class, 'getMerchant']);
+Route::get('/merchant/owner/{id}', [MerchantController::class, 'haveMerchant']);
 Route::put('/merchant/{id}', [MerchantController::class, 'update']);
+Route::put('/merchant/profile/{id}', [MerchantController::class, 'updateProfile']);
+Route::put('/merchant/setting/{id}', [MerchantController::class, 'updateSetting']);
 Route::delete('/merchant/{id}', [MerchantController::class, 'delete']);
 
 use App\Http\Controllers\AccountController;
@@ -52,3 +56,5 @@ Route::post('/account', [AccountController::class, 'store']);
 Route::get('/account/{id}', [AccountController::class, 'getAccount']);
 Route::put('/account/{id}', [AccountController::class, 'update']);
 Route::delete('/account/{id}', [AccountController::class, 'delete']);
+Route::post('/account/login', [AccountController::class, 'login']);
+Route::post('/account/logout', [AccountController::class, 'logout']);

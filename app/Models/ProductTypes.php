@@ -9,11 +9,11 @@ class ProductTypes extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'product_type_id';
+    protected $primaryKey = 'id';
 
     protected $fillable = [
-        'product_type_name',
-        'product_type_description'
+        'name',
+        'description'
     ];
 
     protected $casts = [

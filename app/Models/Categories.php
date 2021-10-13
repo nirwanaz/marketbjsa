@@ -9,12 +9,12 @@ class Categories extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'category_id';
+    protected $primaryKey = 'id';
 
     protected $fillable = [
         'product_type_id',
-        'category_name',
-        'category_description'
+        'name',
+        'description'
     ];
 
     protected $casts = [
@@ -27,7 +27,11 @@ class Categories extends Model
                         'product_types as pt',
                         'categories.product_type_id',
                         '=',
-                        'pt.product_type_id')
+                        'pt.id')
                      ->orderBy('categories.created_at', 'asc');
+    }
+
+    public function scopeFindByPtypeId($query, $id){
+        return $query->where('product_type_id', $id);
     }
 }

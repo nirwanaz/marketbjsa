@@ -43,6 +43,12 @@ class CategoryController extends Controller
         return $catg->toJson();
     }
 
+    public function getCategoryByPtype($id){
+        $catg = Catg::findByPtypeId($id)->get();
+
+        return $catg->toJson();
+    }
+
     public function update(Request $request, $id){
         $validatedData = $request->validate($this->optionValidateData);
 

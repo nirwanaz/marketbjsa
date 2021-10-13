@@ -10,11 +10,19 @@ import MerchantProductCreate from './components/Client/Seller/Daganganku-Buat.vu
 import MerchantProduct from './components/Client/Seller/Daganganku-Lihat.vue'
 import MerchantPerformance from './components/Client/Seller/Bisnis-Performa.vue'
 
+import SellerAuth from './components/Client/Seller/Auth.vue'
+import SellerLogin from './components/Client/Seller/Login.vue'
+import SellerRegister from './components/Client/Seller/Register.vue'
+
 import AdminLayout from './components/Admin/Index.vue'
 import PTypeIndex from './components/Admin/ProductTypeIndex.vue'
 import PTypeForm from './components/Admin/ProductTypeForm.vue'
 import CatgIndex from './components/Admin/CategoriesIndex.vue'
 import CatgForm from './components/Admin/CategoriesForm.vue'
+
+import LoginForm from './components/Admin/Login.vue'
+
+import MobileLoading from './components/mobile/loading.vue'
 
 export const routes = [
   {
@@ -67,7 +75,29 @@ export const routes = [
         path: '/seller/mperformance',
         component: MerchantPerformance
       }
-    ]
+    ],
+    meta: {
+      auth: true
+    }
+  },
+  {
+    path: '/auth/seller',
+    component: SellerAuth,
+    children: [
+      {
+        name: 'slogin',
+        path: '/auth/seller/login',
+        component: SellerLogin
+      },
+      {
+        name: 'sregister',
+        path: '/auth/seller/register',
+        component: SellerRegister
+      }
+    ],
+    meta: {
+      guest: true
+    }
   },
   {
     path: '/admin',
@@ -87,7 +117,32 @@ export const routes = [
         name: 'ptypeEdit',
         path: '/admin/ptypeedit',
         component: PTypeForm
+      },
+      {
+        name: 'catgIndex',
+        path: '/admin/catg',
+        component: CatgIndex
+      },
+      {
+        name: 'catgCreate',
+        path: '/admin/catgcreate',
+        component: CatgForm
+      },
+      {
+        name: 'catgEdit',
+        path: '/admin/catgedit',
+        component: CatgForm
       }
     ]
+  },
+  {
+    name: 'adminLogin',
+    path: '/admin/login',
+    component: LoginForm
+  },
+  {
+    name: 'mobileLoading',
+    path: '/mobile/loading',
+    component: MobileLoading
   }
 ]

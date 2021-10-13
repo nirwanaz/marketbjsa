@@ -4,25 +4,25 @@
       <li class="nav-item dropdown">
         <div class="dropdown-menu show w-100">
           <p class="dropdown-header">Tokoku</p>
-          <a class="dropdown-item" href="#">
+          <router-link :to="{ name:'mprofile' }" class="dropdown-item">
             Profil Toko
-          </a>
-          <a class="dropdown-item" href="#">
+          </router-link>
+          <router-link :to="{ name:'msetting' }" class="dropdown-item">
             Pengaturan Toko
-          </a>
+          </router-link>
           <div class="dropdown-divider"></div>
           <p class="dropdown-header">Daganganku</p>
-          <a class="dropdown-item" href="#">
+          <router-link :to="{ name:'maddProduct' }" class="dropdown-item">
             Buat Dagangan
-          </a>
-          <a class="dropdown-item" href="#">
+          </router-link>
+          <router-link :to="{ name:'mlistProduct' }" class="dropdown-item">
             Dagangan
-          </a>
+          </router-link>
           <div class="dropdown-divider"></div>
           <p class="dropdown-header">Bisnis</p>
-          <a class="dropdown-item" href="#">
+          <router-link :to="{ name: 'mperformance' }" class="dropdown-item">
             Performa Bisnis
-          </a>
+          </router-link>
         </div>
       </li>
     </ul>

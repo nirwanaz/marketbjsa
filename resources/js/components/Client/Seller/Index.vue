@@ -11,7 +11,7 @@
             <nav aria-label="breadcrumb">
               <ol class="breadcrumb">
                 <li class="breadcrumb-item" href="#">Tokoku</li>
-                <li class="breadcrumb-item" aria-current="page">Profil</li>
+                <li class="breadcrumb-item" aria-current="page">{{ this.currentPage }}</li>
               </ol>
             </nav>
             <router-view />
@@ -32,6 +32,19 @@ export default {
     Header,
     Footer,
     SideBar
+  },
+  data () {
+    return {
+      currentPage: 'Performa'
+    }
+  },
+  created () {
+    this.currentPage = this.$route.name
+  },
+  watch: {
+    $route (to, from) {
+      this.currentPage = to.name
+    }
   }
 }
 </script>

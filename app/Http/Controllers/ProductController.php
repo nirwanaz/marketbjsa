@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Products as Prod;
 
 class ProductController extends Controller
@@ -10,9 +11,10 @@ class ProductController extends Controller
     //
     protected $optionValidateData = [
         'name' => 'required',
-        'm_id' => 'required',
         'catg_id' => 'required',
-        'price' => 'required'
+        'm_id' => 'required',
+        'price' => 'required',
+        'description' => 'required'
     ];
     
     public function index(){
@@ -22,14 +24,23 @@ class ProductController extends Controller
     }
 
     public function store(Request $request){
-        $validatedData = $request->validate($optionValidateData);
+        $id = 'P' . random_int(100,999) . rand(2,7);
 
-        $create = Prod::create([
-            'merchant_id' => $validatedData['m_id'],
-            'category_id' => $validatedData['catg_id'],
-            'product_name' => $validatedData['name'],
-            'product_price' => $validatedData['price']
-        ]);
+        $validatedData = $request->validate($this->optionValidateData);
+        
+        try {
+            $create = Prod::create([
+                'id' => $id,
+                'merchant_id' => $validatedData['m_id'],
+                'category_id' => $validatedData['catg_id'],
+                'name' => $validatedData['name'],
+                'image' => $request->image ? $this->upload($request->image) : NULL,
+                'price' => $validatedData['price'],
+                'description' => $validatedData['description']
+            ]);
+        } catch (Exception $e) {
+            echo "Insert Error";
+        }
 
         $msg = [
             'success' => true,
@@ -73,5 +84,24 @@ class ProductController extends Controller
         ];
 
         return response()->json($msg);
+    }
+
+    private function upload($file)
+    {
+        $filename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $filenameFixed = preg_replace('/\s+/', '_', $filename);
+        $extension = $file->getClientOriginalExtension();
+        $newFilename = $filenameFixed.'_'.time().'.'.$extension; 
+
+        $saveImage = Storage::putFileAs('public/prod_img', $file, $newFilename);
+
+        if (!$saveImage) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal untuk menyimpan gambar'
+            ]);
+        }
+
+        return $newFilename;
     }
 }

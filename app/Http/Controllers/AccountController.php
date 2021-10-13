@@ -3,14 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+
 use App\Models\Accounts as A;
+use App\Models\Merchants as M;
 
 class AccountController extends Controller
 {
     //
     protected $optionValidateData = [
-        'fname' => 'required',
-        'lname' => 'required',
+        'fullname' => 'required',
         'address' => 'required',
         'username' => 'required',
         'passwd' => 'required'
@@ -24,15 +27,38 @@ class AccountController extends Controller
 
     public function store(Request $request){
         $validatedData = $request->validate($this->optionValidateData);
+        $string_name = explode(" ", $validatedData['fullname']);
+        $rand_int = rand(1,1000);
+        $account_id = date('Y').rand(10,99).random_int(100,999);
 
-        $create = A::create([
-            'firstname' => $validatedData['fname'],
-            'lastname' => $validatedData['lname'],
-            'address' => $validatedData['address'],
-            'username' => $validatedData['username'],
-            'passwd' => $validatedData['passwd']
-        ]);
+        DB::beginTransaction();
 
+        try {
+            $create = A::create([
+                'id' => $account_id,
+                'fullname' => $validatedData['fullname'],
+                'address' => $validatedData['address'],
+                'username' => $validatedData['username'],
+                'passwd' => bcrypt($validatedData['passwd'])
+            ]);
+        } catch (ValidationException $e) {
+            DB::rollback();
+            return response()->json(['success' => false], 400);
+        }
+        
+        try {
+            $merchant = M::create([
+                'name' => $string_name[0].$rand_int,
+                'address' => $validatedData['address'],
+                'account_id'=> $account_id
+            ]);
+        } catch (ValidationException $e) {
+            DB::rollback();
+            return response()->json(['success' => false], 400);
+        }
+
+        DB::commit();
+        
         $msg = [
             'success' => true,
             'message' => 'Akun Berhasil Ditambahkan'
@@ -76,5 +102,46 @@ class AccountController extends Controller
         ];
 
         return response()->json($msg);
+    }
+
+    public function login(Request $request){
+        $validatedData = $request->validate([
+            'username' => 'required',
+            'passwd' => 'required'
+        ]);
+
+        $account = A::findByUsername($validatedData['username'])->first();
+
+        if (!$account || !Hash::check($validatedData['passwd'], $account->passwd)){
+            return response()->json([
+                'success' => false,
+                'message' => '[Tidak ditemukan username dan password yang cocok]'
+            ], 404);
+        }
+
+        $token = $account->createToken('ApiToken')->plainTextToken;
+
+        $response = [
+            'success' => true,
+            'token' => $token
+        ];
+
+        return response()->json($response);
+    }
+
+    public function logout()
+    {
+        try {
+            auth()->logout();
+         } catch(Throwable $e) {
+            return response()->json($e);
+        }
+
+        $msg = [
+            'success' => true,
+            'message' => 'Logout Berhasil'
+        ];
+
+        return response()->json($msg, 200);
     }
 }

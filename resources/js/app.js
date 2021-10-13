@@ -12,8 +12,10 @@ import App from './components/App.vue'
 import VueAxios from 'vue-axios'
 import VueRouter from 'vue-router'
 import axios from 'axios'
+import VueSweetalert2 from 'vue-sweetalert2';
 
 import { routes } from './routes'
+import store from './store';
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -34,14 +36,38 @@ import { routes } from './routes'
 
 Vue.use(VueRouter)
 Vue.use(VueAxios, axios)
+Vue.use(VueSweetalert2)
 
 const router = new VueRouter({
     mode: 'history',
     routes: routes
 })
 
+router.beforeEach((to, from, next) => {
+    if (to.matched.some(record => record.meta.auth) && !store.getters.isLoggedIn){
+        store.dispatch('get_user').then(() => {
+            if (!store.getters.user) next({ name: 'slogin', query: {redirect: to.fullPath} })
+            else next()
+        })
+    } else {
+        next()
+    }
+})
+
+/*
+store.dispatch('get_user').then(() => {
+    const app = new Vue(
+        Vue.util.extend(
+            { router, store },
+            App
+        )
+    ).$mount('#app')
+})
+*/
+
 const app = new Vue({
     el: '#app',
     router: router,
+    store: store,
     render: h => h(App)
 });

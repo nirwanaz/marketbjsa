@@ -9,24 +9,32 @@ class Merchants extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'merchant_id';
+    protected $primaryKey = 'id';
 
     protected $fillable = [
         'account_id',
-        'merchant_name',
-        'merchant_address',
-        'merchant_status',
-        'merchant_open',
-        'merchant_close'
+        'name',
+        'address',
+        'picture',
+        'ischangename',
+        'status',
+        'opened',
+        'closed'
     ];
 
     protected $casts = [
+        'opened' => 'datetime:H:i',
+        'closed' => 'datetime:H:i',
         'created_at' => 'datetime:Y-m-d H:i:s',
         'updated_at' => 'datetime:Y-m-d H:i:s'
     ];
 
     public function scopeGetInformation($query){
-        return $query->leftJoin('accounts as a', 'merchants.account_id', '=', 'a.account_id')
+        return $query->leftJoin('accounts as a', 'merchants.account_id', '=', 'a.id')
                      ->orderBy('merchants.created_at', 'asc');
+    }
+
+    public function scopeFindByAccountId($query, $id){
+        return $query->where('account_id', $id);
     }
 }

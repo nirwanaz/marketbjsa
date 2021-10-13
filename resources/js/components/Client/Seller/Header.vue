@@ -11,14 +11,32 @@
         <li class="nav-item">  
           <a class="nav-link" href="#">Notification</a>
         </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="profileDropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Profile</a>
+        <li v-if="account" class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="profileDropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ account.fullname }}</a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="profileDropdownMenu">
             <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
+            <a class="dropdown-item" @click="logout">Log out</a>
           </div>
         </li>
       </ul>
     </div>
   </nav>
 </template>
+<script>
+import { mapGetters } from 'vuex'
+
+export default {
+  computed: {
+    ...mapGetters({
+      account: 'user'
+    })
+  },
+  methods: {
+    logout () {
+      this.$store.dispatch('logout').then(() => {
+        this.$router.push({name: 'slogin'})
+      })
+    }
+  }  
+}
+</script>

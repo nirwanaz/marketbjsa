@@ -9,13 +9,16 @@ class Products extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'product_id';
+    protected $primaryKey = 'id';
 
     protected $fillable = [
+        'id',
         'merchant_id',
         'category_id',
-        'product_name',
-        'product_price',
+        'name',
+        'image',
+        'price',
+        'description'
     ];
 
     protected $casts = [
@@ -23,10 +26,11 @@ class Products extends Model
         'updated_at' => 'datetime:Y-m-d H:i:s'
     ];
 
-    public function scopeGetInformation($query){
-        return $query->leftJoin('merchants as m', 'products.merchant_id', '=', 'm.merchant_id')
-                     ->leftJoin('categories as c', 'products.category_id', '=', 'm.category_id')
-                     ->leftJoin('productTypes as pt', 'c.product_type_id', '=', 'pt.product_type_id')
-                     ->orderBy('products.created_at', 'asc');
+    public function scopeGetInformation($query)
+    {
+        return $query->leftJoin('merchants m', 'merchant_id', '=', 'm.id')
+                        ->leftJoin('categories c', 'category_id', '=', 'c.id')
+                        ->leftJoin('product_types pt', 'c.product_type_id', '=', 'pt.id')
+                        ->orderBy('product.created_at', 'asc');
     }
 }
