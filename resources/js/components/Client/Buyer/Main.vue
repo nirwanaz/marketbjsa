@@ -1,50 +1,17 @@
 <template>
   <div class="container-fluid">
     <div class="col-sm-12 py-2">
-      <div class="carousel slide" id="carouselAnnounce" data-ride="carousel" data-interval="3000">
-        <ol class="carousel-indicators">
-          <li data-target="#carouselAnnounce" data-slide-to="0" class="active"></li>
-          <li data-target="#carouselAnnounce" data-slide-to="1"></li>
-          <li data-target="#carouselAnnounce" data-slide-to="2"></li>
-        </ol>
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <img class="d-block w-100" height="400" src="https://cdn.pixabay.com/photo/2018/07/18/19/12/pasta-3547078_960_720.jpg" alt="First Slide">
-          </div>
-          <div class="carousel-item">
-            <img class="d-block w-100" height="400" src="https://cdn.pixabay.com/photo/2018/08/29/19/03/steak-3640560_960_720.jpg" alt="Second Slide">
-          </div>
-          <div class="carousel-item">
-            <img class="d-block w-100" height="400" src="https://cdn.pixabay.com/photo/2016/01/22/02/13/meat-1155132_960_720.jpg" alt="Third Slide">
-          </div>
-          <a 
-            class="carousel-control-prev" 
-            href="#carouselAnnounce" 
-            role="button" 
-            data-slide="prev"
-            >
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-          </a>
-          <a
-            class="carousel-control-next" 
-            href="#carouselAnnounce"
-            role="button"
-            data-slide="next"
-            >
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-          </a>
-        </div>
-      </div>
-
+      <BaseCarousel 
+        :interval="3000"
+        :items="items"
+        />
     </div>
     <div class="col-sm-12 py-3">
       <div class="card">
         <div class="card-body">
           <ul class="nav justify-content-center">
-            <li v-for="category in (5)" :key="category" class="nav-item">
-              <a class="nav-link" href="#">Category {{ category }}</a>
+            <li v-for="category in categories" :key="category.id" class="nav-item">
+              <a class="nav-link" href="#">{{ category.name }}</a>
             </li>
           </ul>
         </div>
@@ -53,17 +20,14 @@
     <!-- Begin Card -->
     <div class="col-sm-12 py-3">
       <div class="row">
-        <div v-for="id in (5)" :key="id" class="col-sm-6 col-md-4 col-lg-3 col-xl-3 my-2">
-          <div class="card">
-            <img class="card-img-top" src="https://cdn.pixabay.com/photo/2016/08/16/06/29/coconut-1597233__340.png" alt="Card image cap">
-            <div class="card-body">
-              <h5 class="card-title">Merchant {{ id }}</h5>
-              <p class="card-text">This is a wider card with supporting text</p>
-            </div>
-            <div class="card-footer">
-              <small class="text-muted">Last updated 3 mins ago</small>
-            </div>
-          </div>
+        <div v-for="merchant in merchants" :key="merchant.id" class="col-sm-6 col-md-4 col-lg-3 col-xl-3 my-2">
+          <MerchantCard 
+            :fileImage="merchant.image ? `/storage/merchant_img/${merchant.image}` : 'https://cdn.pixabay.com/photo/2016/08/16/06/29/coconut-1597233__340.png'"
+            nameImage="Merchant Card"
+            :title="merchant.name"
+            :owner="merchant.owner"
+            :created="merchant.created_at"
+            />
         </div>
       </div>      
     </div>
@@ -100,7 +64,34 @@
 </style>>
 -->
 <script>
+import BaseCarousel from '../../BaseCarousel.vue'
+import MerchantCard from '../../MerchantCard.vue'
 export default {
+  components: {
+    BaseCarousel,
+    MerchantCard
+  },
+  data () {
+    return {
+      items: [
+          'https://cdn.pixabay.com/photo/2018/07/18/19/12/pasta-3547078_960_720.jpg',
+          'https://cdn.pixabay.com/photo/2018/08/29/19/03/steak-3640560_960_720.jpg',
+          'https://cdn.pixabay.com/photo/2016/01/22/02/13/meat-1155132_960_720.jpg'
+      ],
+      categories: [],
+      merchants: [],
+    }
+  },
+  created () {
+    this.axios.get('/api/catg')
+      .then(response => {
+        this.categories = response.data
+      })
+    this.axios.get('/api/merchant')
+      .then(response => {
+        this.merchants = response.data
+      })
+  }
   
 }
 </script>

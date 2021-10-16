@@ -14,9 +14,11 @@ class CreateProductTypesTable extends Migration
     public function up()
     {
         Schema::create('product_types', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->longText('description');
+            $table->charset = 'utf8mb4';
+            $table->collation = 'utf8mb4_unicode_ci';
+            $table->smallIncrements('id');
+            $table->string('name', 24);
+            $table->text('description');
             $table->timestamps();
         });
     }

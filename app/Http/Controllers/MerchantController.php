@@ -25,15 +25,15 @@ class MerchantController extends Controller
     }
 
     public function store(Request $request){
-        $validatedData = $request->validate($optionValidateData);
+        $validatedData = $request->validate($this->optionValidateData);
 
-        $create = M::create([
+        M::create([
             'account_id' => $validatedData['acc_id'],
-            'merchant_name' => $validatedData['name'],
-            'merchant_address' => $validatedData['address'],
-            'merchant_status' => $validatedData['stats'],
-            'mercahnt_open' => $validatedData['open'],
-            'merchant_close' => $validatedData['close']
+            'name' => $validatedData['name'],
+            'address' => $validatedData['address'],
+            'is_open' => $validatedData['stats'],
+            'opened' => $validatedData['open'],
+            'closed' => $validatedData['close']
         ]);
 
         $msg = [
@@ -57,13 +57,29 @@ class MerchantController extends Controller
     }
 
     public function updateProfile(Request $request, $id){
+        
+        $save = false;
         $merchant = M::findOrFail($id);
-        $merchant->name = $request->name;
-        $merchant->address = $request->address;
-        $merchant->ischangename = 1;
-        $merchant->picture = $request->picture ? $this->upload($request->picture) : NULL;
+     
+        if ($merchant->name !== $request->name) {
+            $merchant->name = $request->name;
+            $merchant->is_changename = 1;
+            $save = true;
+        }
 
-        $merchant->save();
+        if ($merchant->address !== $request->address) {
+            $merchant->address = $request->address;
+            $save = true;
+        }
+
+        if ($merchant->image !== $request->picture) {
+            $merchant->image = $request->picture ? $this->upload($request->picture) : NULL;
+            $save = true;
+        }
+
+        if ($save) {
+            $merchant->save();
+        }
 
         $msg = [
             'success' => true,
@@ -75,11 +91,28 @@ class MerchantController extends Controller
 
     public function updateSetting(Request $request, $id){
         $merchant = M::findOrFail($id);
-        $merchant->opened = $request->opened;
-        $merchant->closed = $request->closed;
-        $merchant->status = $request->isstatus ? '1' : '0';
+        $save = false;
+        // standarisasi nilai dari atribut $is_open;
+        $is_open = $request->isstatus ? '1' : '0';
 
-        $merchant->save();
+        if ($merchant->opened !== $request->opened) {
+            $merchant->opened = $request->opened;
+            $save = true;
+        }
+
+        if ($merchant->closed !== $request->closed) {
+            $merchant->closed = $request->closed;
+            $save = true;
+        }
+        
+        if ($merchant->is_open !== $is_open) {
+            $merchant->is_open = $is_open;
+            $save = true;
+        }
+
+        if ($save) {
+            $merchant->save();
+        }
 
         $msg = [
             'success' => true,
@@ -90,7 +123,7 @@ class MerchantController extends Controller
     }
 
     public function update(Request $request, $id){
-        $validatedData = $request->validate($optionValidateData);
+        $validatedData = $request->validate($this->optionValidateData);
 
         $merchant = M::findOrFail($id);
         $merchant->name = $validatedData['name'];

@@ -107,7 +107,7 @@ export default {
 
       if (this.merchant.ischangename == 1) this.isDisabled = true
 
-      if (this.merchant.picture) this.imgSrc = `/storage/merchant_img/${this.merchant.picture}`
+      if (this.merchant.image) this.imgSrc = `/storage/merchant_img/${this.merchant.image}`
     })
   },
   mounted () {

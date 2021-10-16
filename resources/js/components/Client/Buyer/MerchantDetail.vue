@@ -67,7 +67,7 @@
                   alt="Food Img"
                   >
                 <div class="card-body">
-                  <h5 class="card-title">Food {{ food }}</h5>
+                  <h5 class="card-title">Food</h5>
                   <p class="card-text">Rp. 10.000</p>
                 </div>
                 <div class="card-footer">

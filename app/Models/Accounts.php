@@ -10,12 +10,14 @@ use Laravel\Sanctum\HasApiTokens;
 class Accounts extends Authenticatable
 {
     use HasFactory, Notifiable, HasApiTokens;
-
+    
     protected $primaryKey = 'id';
+    protected $keyType = 'string';
+    public $incrementing = false;
 
     protected $fillable = [
         'id',
-        'fullname',
+        'name',
         'address',
         'username',
         'passwd'    

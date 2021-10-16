@@ -19,19 +19,25 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 use App\Http\Controllers\ProductTypeController;
-Route::get('/pt', [ProductTypeController::class, 'index']);
-Route::post('/pt', [ProductTypeController::class, 'store']);
-Route::get('/pt/{id}', [ProductTypeController::class, 'getproductType']);
-Route::put('/pt/{id}', [ProductTypeController::class, 'update']);
-Route::delete('/pt/{id}', [ProductTypeController::class, 'delete']);
+Route::prefix('pt')->group(function() {
+    Route::get('', [ProductTypeController::class, 'index']);
+    Route::post('', [ProductTypeController::class, 'store']);
+    Route::get('/{id}', [ProductTypeController::class, 'getproductType']);
+    Route::put('/{id}', [ProductTypeController::class, 'update']);
+    Route::delete('/{id}', [ProductTypeController::class, 'delete']);
+});
+
 
 use App\Http\Controllers\CategoryController;
-Route::get('/catg', [CategoryController::class, 'index']);
-Route::post('/catg', [CategoryController::class, 'store']);
-Route::get('/catg/{id}', [CategoryController::class, 'getCategory']);
-Route::get('/catg/findbyptype/{id}', [CategoryController::class, 'getCategoryByPtype']);
-Route::put('/catg/{id}', [CategoryController::class, 'update']);
-Route::delete('/catg/{id}', [CategoryController::class, 'delete']);
+Route::prefix('catg')->group(function() {
+    Route::get('', [CategoryController::class, 'index']);
+    Route::post('', [CategoryController::class, 'store']);
+    Route::get('/{id}', [CategoryController::class, 'getCategory']);
+    Route::get('/findbyptype/{id}', [CategoryController::class, 'getCategoryByPtype']);
+    Route::put('/{id}', [CategoryController::class, 'update']);
+    Route::delete('/{id}', [CategoryController::class, 'delete']);
+    
+});
 
 use App\Http\Controllers\ProductController;
 Route::get('/prod', [ProductController::class, 'index']);

@@ -10,14 +10,17 @@ class Merchants extends Model
     use HasFactory;
 
     protected $primaryKey = 'id';
+    protected $keyType = 'string';
+    public $incrementing = false;
 
     protected $fillable = [
+        'id',
         'account_id',
         'name',
         'address',
-        'picture',
-        'ischangename',
-        'status',
+        'image',
+        'is_changename',
+        'is_open',
         'opened',
         'closed'
     ];
@@ -31,7 +34,8 @@ class Merchants extends Model
 
     public function scopeGetInformation($query){
         return $query->leftJoin('accounts as a', 'merchants.account_id', '=', 'a.id')
-                     ->orderBy('merchants.created_at', 'asc');
+                    ->select('merchants.*', 'a.name as owner')
+                    ->orderBy('merchants.created_at', 'asc');
     }
 
     public function scopeFindByAccountId($query, $id){

@@ -1,19 +1,18 @@
 <template>
-  <div class="container-fluid">
-    <Header/>
-    <router-view/>
-    <Footer/>
+  <div>
+    <buyer-navbar :route="{ name: 'main' }"/>
+    <div class="container-fluid">
+      <router-view/>
+    </div>
   </div>
 </template>
 
 <script>
-import Header from './Header.vue'
-import Footer from './Footer.vue'
+import BuyerNavbar from '../../BuyerNavbar.vue'
 
 export default {
   components: {
-    Header,
-    Footer
+    BuyerNavbar,
   }
 }
 </script>

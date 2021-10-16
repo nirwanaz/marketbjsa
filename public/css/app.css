@@ -4520,7 +4520,7 @@ input[type=button].btn-block {
 .card-columns .card {
   margin-bottom: 0.75rem;
 }
-@media (min-width: 576px) and (max-width: 767.98px) {
+@media (min-width: 576px) {
   .card-columns {
     -moz-column-count: 3;
          column-count: 3;
@@ -4528,30 +4528,6 @@ input[type=button].btn-block {
          column-gap: 1.25rem;
     orphans: 1;
     widows: 1;
-  }
-  .card-columns .card {
-    display: inline-block;
-    width: 100%;
-  }
-}
-@media (min-width: 768px) and (max-width: 1199.98px) {
-  .card-columns {
-    -moz-column-count: 4;
-         column-count: 4;
-    -moz-column-gap: 1.25rem;
-         column-gap: 1.25rem;
-  }
-  .card-columns .card {
-    display: inline-block;
-    width: 100%;
-  }
-}
-@media (min-width: 1200px) {
-  .card-columns {
-    -moz-column-count: 5;
-         column-count: 5;
-    -moz-column-gap: 1.25rem;
-         column-gap: 1.25rem;
   }
   .card-columns .card {
     display: inline-block;

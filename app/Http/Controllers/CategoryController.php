@@ -24,8 +24,8 @@ class CategoryController extends Controller
         $validatedData = $request->validate($this->optionValidateData);
 
         $create = Catg::create([
-            'category_name'         => $validatedData['name'],
-            'category_description'  => $validatedData['description'],
+            'name'         => $validatedData['name'],
+            'description'  => $validatedData['description'],
             'product_type_id'       => $validatedData['pt_id']
         ]);
 
@@ -58,9 +58,9 @@ class CategoryController extends Controller
         ];
 
         $catg = Catg::findOrFail($id);
-        $catg->category_name = $validatedData['name'];
-        $catg->category_description = $validatedData['description'];
-        $catg->category_type_id = $validatedData['pt_id'];
+        $catg->name = $validatedData['name'];
+        $catg->description = $validatedData['description'];
+        $catg->product_type_id = $validatedData['pt_id'];
 
         $catg->save();
     

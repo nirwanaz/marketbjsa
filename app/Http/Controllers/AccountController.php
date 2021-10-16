@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 use App\Models\Accounts as A;
 use App\Models\Merchants as M;
+use App\Helper\GenerateRandomId;
 
 class AccountController extends Controller
 {
@@ -29,32 +30,34 @@ class AccountController extends Controller
         $validatedData = $request->validate($this->optionValidateData);
         $string_name = explode(" ", $validatedData['fullname']);
         $rand_int = rand(1,1000);
-        $account_id = date('Y').rand(10,99).random_int(100,999);
+        $account_id = GenerateRandomId::generate('A');
+        $merchant_id = GenerateRandomId::generate('M');
 
         DB::beginTransaction();
 
         try {
-            $create = A::create([
+            A::create([
                 'id' => $account_id,
-                'fullname' => $validatedData['fullname'],
+                'name' => $validatedData['fullname'],
                 'address' => $validatedData['address'],
                 'username' => $validatedData['username'],
                 'passwd' => bcrypt($validatedData['passwd'])
             ]);
-        } catch (ValidationException $e) {
+        } catch (\Exception $e) {
             DB::rollback();
-            return response()->json(['success' => false], 400);
+            return response()->json(['success' => false, 'model' => 'account', 'message' => $e], 400);
         }
         
         try {
-            $merchant = M::create([
+            M::create([
+                'id' => $merchant_id,
                 'name' => $string_name[0].$rand_int,
                 'address' => $validatedData['address'],
                 'account_id'=> $account_id
             ]);
-        } catch (ValidationException $e) {
+        } catch (\Exception $e) {
             DB::rollback();
-            return response()->json(['success' => false], 400);
+            return response()->json(['success' => false, 'model' => 'merchant', 'message' => $e], 400);
         }
 
         DB::commit();
@@ -132,8 +135,8 @@ class AccountController extends Controller
     public function logout()
     {
         try {
-            auth()->logout();
-         } catch(Throwable $e) {
+            auth()->logout;
+         } catch(\Exception $e) {
             return response()->json($e);
         }
 

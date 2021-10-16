@@ -22,8 +22,8 @@ class ProductTypeController extends Controller
         ]);
 
         $create = PT::create([
-            'product_type_name'           => $validatedData['name'],
-            'product_type_description'    => $validatedData['description'] 
+            'name'           => $validatedData['name'],
+            'description'    => $validatedData['description'] 
         ]);
 
         $msg = [

@@ -14,13 +14,13 @@ class CreateAccountsTable extends Migration
     public function up()
     {
         Schema::create('accounts', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('address');
-            $table->string('username')->unique();
-            $table->string('passwd');
-            $table->integer('merchant_id')->unique();
-            $table->rememberToken();
+            $table->charset = 'utf8mb4';
+            $table->collation = 'utf8mb4_unicode_ci';
+            $table->string('id', 11)->primary();
+            $table->string('name', 32)->nullable(false);
+            $table->string('address', 64)->nullable(false);
+            $table->string('username', 16)->unique();
+            $table->string('passwd', 32);
             $table->timestamps();
         });
     }

@@ -3,6 +3,7 @@
       :id="name"
       :type="type"
       :value="value"
+      :size="size"
       :required="required"
       @input="updateValue"
       :placeholder="placeholder"
@@ -22,6 +23,9 @@ export default {
     },
     value: {
       type: [String, Number]
+    },
+    size: {
+      type: String
     },
     type: {
       type: String,
